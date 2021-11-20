@@ -79,4 +79,24 @@ class WalletApi
         }
         
     }
+    
+    public function get_all_by_user()
+    {
+        try {
+            $id = $_GET['id'] ?? null;
+            
+            if (!$id)
+                throw new NinjaException('Vui lòng truyền tham số id người dùng');
+            
+            $wallets = $this->wallet_model->get_all_by_user_id($id);
+            
+            $this->response_json([
+                'status' => 'success',
+                'data' => $wallets
+            ]);
+        }
+        catch (NinjaException $exception) {
+            
+        }
+    }
 }

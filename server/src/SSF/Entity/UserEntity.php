@@ -2,6 +2,8 @@
 
 namespace SSF\Entity;
 
+use Ninja\DatabaseTable;
+
 class UserEntity
 {
     const PRIMARY_KEY = 'id';
@@ -28,4 +30,21 @@ class UserEntity
     public $display_name;
     public $avatar;
     public $created_at;
+    
+    private $wallet_table;
+    
+    private $wallet_entities;
+    
+    public function __construct(DatabaseTable $wallet_table)
+    {
+        $this->wallet_table = $wallet_table;
+    }
+    
+    public function get_wallets()
+    {
+        if (!$this->wallet_entities)
+            $this->wallet_entities = $this->wallet_table->find(WalletEntity::KEY_USER_ID, $this->id);
+        
+        return $this->wallet_entities;
+    }
 }

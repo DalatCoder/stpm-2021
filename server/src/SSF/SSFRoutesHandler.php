@@ -104,6 +104,12 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
                     'action' => 'get_all_logs_belong_to_wallet'
                 ]
             ],
+            '/api/v1/wallets/by-user' => [
+                'GET' => [
+                    'controller' => $wallet_api_handler,
+                    'action' => 'get_all_by_user'
+                ]
+            ]
         ];
     }
 

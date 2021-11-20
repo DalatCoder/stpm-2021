@@ -53,4 +53,9 @@ class WalletModel
         
         return $wallet_entity;
     }
+    
+    public function get_all_by_user_id($user_id)
+    {
+        return $this->wallet_table->find(WalletEntity::KEY_USER_ID, $user_id);
+    }
 }
