@@ -66,7 +66,7 @@ class EntryPoint
         }
 
         if (!method_exists($controller, $action))
-            throw new NinjaException("Action: $action không tồn tại trên Controller: $controller");
+            throw new NinjaException("Action: $action không tồn tại trên Controller");
 
         if (method_exists($controller, 'get_entrypoint_args'))
             $controller->get_entrypoint_args([
