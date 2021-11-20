@@ -23,12 +23,15 @@ class WalletEntity
     public $created_at;
 
     private $user_table;
+    private $wallet_log_table;
     
     private $user_entity;
+    private $wallet_log_entities;
     
-    public function __construct(DatabaseTable $user_table)
+    public function __construct(DatabaseTable $user_table, DatabaseTable $wallet_log_table)
     {
         $this->user_table = $user_table;
+        $this->wallet_log_table = $wallet_log_table;
     }
     
     public function get_owner()
@@ -39,6 +42,42 @@ class WalletEntity
         return $this->user_entity;
     }
     
+    public function get_logs()
+    {
+        if (!$this->wallet_log_entities)
+            $this->wallet_log_entities = $this->wallet_log_table->find(WalletLogEntity::KEY_WALLET_ID, $this->id);
+        
+        return $this->wallet_log_entities;
+    }
+    
+    public function get_all_income_logs()
+    {
+        $all = $this->get_logs();
+        
+        $filtered = [];
+        
+        foreach ($all as $item) {
+            if ($item->type === WalletLogEntity::TYPE_INCOME)
+                $filtered[] = $item;
+        }
+        
+        return $filtered;
+    }
+
+    public function get_all_outcome_logs()
+    {
+        $all = $this->get_logs();
+
+        $filtered = [];
+
+        foreach ($all as $item) {
+            if ($item->type === WalletLogEntity::TYPE_OUTCOME)
+                $filtered[] = $item;
+        }
+
+        return $filtered;
+    }
+
     public function get_begin_date($format = 'Y-m-d')
     {
         if ($this->date_begin instanceof \DateTime)

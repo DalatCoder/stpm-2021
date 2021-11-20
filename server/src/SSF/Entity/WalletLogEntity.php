@@ -18,6 +18,9 @@ class WalletLogEntity
     const KEY_LOG_DATE = 'log_date';
     const KEY_CREATED_AT = 'created_at';
     
+    const TYPE_INCOME = 'in';
+    const TYPE_OUTCOME = 'out';
+    
     public $id;
     public $wallet_id;
     public $category_id;
