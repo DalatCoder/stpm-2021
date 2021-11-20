@@ -11,7 +11,7 @@ try {
     define('ROOT_DIR', dirname(__DIR__ . '/../../'));
 
     $route = strtok($_SERVER['REQUEST_URI'], '?');
-    $routes_handler = new \Sample\SampleRoutes();
+    $routes_handler = new \SSF\SSFRoutesHandler();
     
     $method = $_SERVER['REQUEST_METHOD'];
 
