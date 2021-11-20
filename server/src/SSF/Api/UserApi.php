@@ -20,9 +20,22 @@ class UserApi
     
     public function index()
     {
+        $users = $this->user_table->findAll();
+        
+        $response_data = [];
+        foreach ($users as $user) {
+            $response_data[] = [
+                'id' => $user->id,
+                'username' => $user->username,
+                'email' => $user->email,
+                'display_name' => $user->display_name,
+                'avatar' => $user->avatar
+            ];
+        }
+        
         $this->response_json([
             'status' => 'success',
-            'data' => null
+            'data' => $response_data
         ]);
     }
     
