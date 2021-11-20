@@ -1,0 +1,10 @@
+{
+    "website_name": "Lab07",
+    "db_name": "lab07_mvc",
+    "db_host": "localhost",
+    "db_charset": "utf8",
+    "db_username": "root",
+    "db_password": "",
+    "view_folder": "views",
+    "home_path": "/"
+}
