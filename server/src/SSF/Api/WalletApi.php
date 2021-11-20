@@ -18,7 +18,7 @@ class WalletApi
         $this->wallet_model = $wallet_model;
     }
     
-    public function create_new_wallet()
+    public function store()
     {
         try {
             $json = $this->parse_json_from_request();

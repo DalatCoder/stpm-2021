@@ -73,7 +73,7 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
                 ],
                 'POST' => [
                     'controller' => $wallet_api_handler,
-                    'action' => 'create_new_wallet'
+                    'action' => 'store'
                 ]
             ]
         ];
