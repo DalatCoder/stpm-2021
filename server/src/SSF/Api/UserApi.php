@@ -2,10 +2,8 @@
 
 namespace SSF\Api;
 
-use Ninja\DatabaseTable;
 use Ninja\NinjaException;
 use Ninja\NJTrait\Jsonable;
-use SSF\Entity\UserEntity;
 use SSF\Model\UserModel;
 
 class UserApi
