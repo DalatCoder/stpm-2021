@@ -6,21 +6,22 @@ use Ninja\DatabaseTable;
 use Ninja\NinjaException;
 use Ninja\NJTrait\Jsonable;
 use SSF\Entity\UserEntity;
+use SSF\Model\UserModel;
 
 class UserApi
 {
     use Jsonable;
     
-    private $user_table;
+    private $user_model;
     
-    public function __construct(DatabaseTable $user_table)
+    public function __construct(UserModel $userModel)
     {
-        $this->user_table = $user_table;
+        $this->user_model = $userModel;
     }
     
     public function index()
     {
-        $users = $this->user_table->findAll();
+        $users = $this->user_model->get_users();
         
         $response_data = [];
         foreach ($users as $user) {
@@ -43,32 +44,9 @@ class UserApi
     {
         try {
             $json = $this->parse_json_from_request();
-
-            $username = $json[UserEntity::KEY_USERNAME] ?? null;
-            $email = $json[UserEntity::KEY_EMAIL] ?? null;
-            $password = $json[UserEntity::KEY_PASSWORD] ?? null;
-            $display_name = $json[UserEntity::KEY_DISPLAY_NAME] ?? null;
-            $avatar = $json[UserEntity::KEY_AVATAR] ?? null;
-
-            $existing = $this->user_table->find(UserEntity::KEY_USERNAME, $username);
-            if (count($existing))
-                throw new NinjaException('Tên người dùng đã tồn tại');
-
-            $existing = $this->user_table->find(UserEntity::KEY_EMAIL, $email);
-            if (count($existing))
-                throw new NinjaException('Email đã tồn tại');
             
-            $password = password_hash($password, PASSWORD_DEFAULT);
-            
-            $new_user = $this->user_table->save([
-                UserEntity::KEY_USERNAME => $username,
-                UserEntity::KEY_EMAIL => $email,
-                UserEntity::KEY_DISPLAY_NAME => $display_name,
-                UserEntity::KEY_AVATAR => $avatar,
-                UserEntity::KEY_PASSWORD => $password,
-                UserEntity::KEY_TYPE => UserEntity::TYPE_USER,
-            ]);
-            
+            $new_user = $this->user_model->create_new_user($json);
+
             $response_data = [
                 'id' => $new_user->id,
                 'username' => $new_user->username,

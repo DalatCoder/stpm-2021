@@ -7,6 +7,7 @@ use SSF\Api\UserApi;
 use SSF\Api\WalletApi;
 use SSF\Entity\UserEntity;
 use SSF\Entity\WalletEntity;
+use SSF\Model\UserModel;
 use SSF\Model\WalletModel;
 
 class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
@@ -24,7 +25,8 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
 
     public function getRoutes(): array
     {
-        $user_api_handler = new UserApi($this->user_table);
+        $user_model = new UserModel($this->user_table);
+        $user_api_handler = new UserApi($user_model);
         
         $wallet_model = new WalletModel($this->wallet_table);
         $wallet_api_handler = new WalletApi($wallet_model);
