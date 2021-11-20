@@ -27,7 +27,8 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
     {
         $this->user_table = new DatabaseTable(UserEntity::TABLE, UserEntity::PRIMARY_KEY, UserEntity::CLASS_NAME);
         $this->wallet_table = new DatabaseTable(WalletEntity::TABLE, WalletEntity::PRIMARY_KEY, WalletEntity::CLASS_NAME, [
-            &$this->user_table
+            &$this->user_table,
+            &$this->wallet_log_table
         ]);
         $this->category_table = new DatabaseTable(CategoryEntity::TABLE, CategoryEntity::PRIMARY_KEY, CategoryEntity::CLASS_NAME);
         $this->wallet_log_table = new DatabaseTable(WalletLogEntity::TABLE, WalletLogEntity::PRIMARY_KEY, WalletLogEntity::CLASS_NAME, [
@@ -96,7 +97,13 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
                     'controller' => $wallet_api_handler,
                     'action' => 'store'
                 ]
-            ]
+            ],
+            '/api/v1/wallets/logs' => [
+                'GET' => [
+                    'controller' => $wallet_api_handler,
+                    'action' => 'get_all_logs_belong_to_wallet'
+                ]
+            ],
         ];
     }
 

@@ -52,4 +52,31 @@ class WalletApi
             ], 400);
         }
     }
+    
+    public function get_all_logs_belong_to_wallet()
+    {
+        try {
+            $id = $_GET['id'] ?? null;
+            
+            if (!$id)
+                throw new NinjaException('Vui lòng truyền tham số id');
+            
+            $wallet_entity = $this->wallet_model->get_wallet_by_id($id);
+            
+            $logs = $wallet_entity->get_logs();
+            
+            $this->response_json([
+                'status' => 'success',
+                'data' => $logs
+            ]);
+        }
+        catch (NinjaException $exception) {
+            $this->response_json([
+                'status' => 'fail',
+                'data' => null,
+                'message' => $exception->getMessage()
+            ], 400);
+        }
+        
+    }
 }

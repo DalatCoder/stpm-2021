@@ -40,4 +40,17 @@ class WalletModel
             WalletEntity::KEY_DATE_END => $date_end
         ]);
     }
+
+    /**
+     * @throws NinjaException
+     */
+    public function get_wallet_by_id($id)
+    {
+        $wallet_entity = $this->wallet_table->findById($id);
+        
+        if (!$wallet_entity)
+            throw new NinjaException('Không tìm thấy ví tiền này');
+        
+        return $wallet_entity;
+    }
 }
