@@ -2,7 +2,9 @@
 
 namespace SSF;
 
+use Ninja\Authentication;
 use Ninja\DatabaseTable;
+use SSF\Api\AuthApi;
 use SSF\Api\CategoryApi;
 use SSF\Api\UserApi;
 use SSF\Api\WalletApi;
@@ -22,10 +24,14 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
     private $wallet_table;
     private $category_table;
     private $wallet_log_table;
+    
+    private $authentication_helper;
 
     public function __construct()
     {
-        $this->user_table = new DatabaseTable(UserEntity::TABLE, UserEntity::PRIMARY_KEY, UserEntity::CLASS_NAME);
+        $this->user_table = new DatabaseTable(UserEntity::TABLE, UserEntity::PRIMARY_KEY, UserEntity::CLASS_NAME, [
+            &$this->wallet_table
+        ]);
         $this->wallet_table = new DatabaseTable(WalletEntity::TABLE, WalletEntity::PRIMARY_KEY, WalletEntity::CLASS_NAME, [
             &$this->user_table,
             &$this->wallet_log_table
@@ -35,6 +41,8 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
             &$this->wallet_table,
             &$this->category_table
         ]);
+        
+        $this->authentication_helper = new Authentication($this->user_table, UserEntity::KEY_USERNAME, UserEntity::KEY_PASSWORD);
     }
 
     public function getRoutes(): array
@@ -50,13 +58,15 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
         
         $wallet_log_model = new WalletLogModel($this->wallet_log_table);
         $wallet_log_api_handler = new WalletLogApi($wallet_log_model);
+        $auth_api_handler = new AuthApi($this->authentication_helper);
 
         $user_routes = $this->get_user_api_routes($user_api_handler);
         $wallet_routes = $this->get_wallet_api_routes($wallet_api_handler);
         $category_routes = $this->get_category_api_routes($category_api_handler);
         $wallet_log_routes = $this->get_walletlog_api_routes($wallet_log_api_handler);
+        $auth_routes = $this->get_auth_api_routes($auth_api_handler);
 
-        return $user_routes + $wallet_routes + $category_routes + $wallet_log_routes;
+        return $user_routes + $wallet_routes + $category_routes + $wallet_log_routes + $auth_routes;
     }
 
     public function getAuthentication(): ?\Ninja\Authentication
@@ -140,6 +150,18 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
                 'POST' => [
                     'controller' => $category_api_handler,
                     'action' => 'store'
+                ]
+            ]
+        ];
+    }
+    
+    private function get_auth_api_routes(AuthApi $auth_api_handler)
+    {
+        return [
+            '/api/v1/auth/login' => [
+                'POST' => [
+                    'controller' => $auth_api_handler,
+                    'action' => 'log_user_in'
                 ]
             ]
         ];

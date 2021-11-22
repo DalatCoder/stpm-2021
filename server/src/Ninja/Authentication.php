@@ -23,6 +23,8 @@ class Authentication
     public function login($username, $password)
     {
         $user = $this->users->find($this->usernameColumn, strtolower($username));
+        
+        error_log(print_r($user, true));
 
         if (empty($user))
             return false;
@@ -31,18 +33,24 @@ class Authentication
         
         /** 
          * Hashed password
-         * 
+         *
+         */
         if (!password_verify($password, $user[0]->$passwordColumn))
             return false;
-        */
         
-        if ($password !== $user[0]->$passwordColumn)
-            return false;
-
         session_regenerate_id();
         $_SESSION['username'] = $username;
         $_SESSION['password'] = $user[0]->$passwordColumn;
 
+        return true;
+    }
+    
+    public function logout()
+    {
+        unset($_SESSION['username']);
+        unset($_SESSION['password']);
+        session_destroy();
+        
         return true;
     }
 
@@ -62,15 +70,12 @@ class Authentication
         
         /**
          * Hashed Password
-         * 
+         *
+         */
         if ($user[0]->$passwordColumn !== $_SESSION['password']) {
             return false;
         }
-        */
         
-        if ($user[0]->$passwordColumn !== $_SESSION['password'])
-            return false;
-
         return true;
     }
 
@@ -84,5 +89,10 @@ class Authentication
             $this->user_entity = $this->users->find($this->usernameColumn, strtolower($_SESSION['username']))[0];
 
         return $this->user_entity;
+    }
+    
+    public function get_sid()
+    {
+        return session_id();
     }
 }
