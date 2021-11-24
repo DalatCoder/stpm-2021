@@ -10,9 +10,16 @@ class ViewHandler
     const ECHO_SUGAR_PATTERN = '~\{{\s*(.+?)\s*\}}~is';
     const ESCAPED_ECHO_SUGAR_PATTER = '~\{{{\s*(.+?)\s*\}}}~is';
     const PHP_SUGAR_PATTERN = '~\{%\s*(.+?)\s*\%}~is';
+    
+    private $general_args;
 
     private string $view_directory = '';
     private array $block_sections = [];
+    
+    public function set_general_args($general_args)
+    {
+        $this->general_args = $general_args;
+    }
     
     public function set_view_directory($directory_path): ViewHandler
     {
@@ -33,6 +40,7 @@ class ViewHandler
             $source = $this->compile_source($source);
 
             extract($template_args);
+            extract($this->general_args, EXTR_SKIP);
 
             // TODO: Dangerous code, replace me later
             eval("?> $source <?php");

@@ -72,7 +72,9 @@ class EntryPoint
             $controller->get_entrypoint_args([
                 'route' => $this->route,
                 'method' => $this->method,
-                'shop_name' => NJConfiguration::get('shop_name') ?? null
+                'shop_name' => NJConfiguration::get('shop_name') ?? null,
+                'is_logged_in' => $authentication instanceof Authentication && $authentication->isLoggedIn(), 
+                'logged_in_user' => $authentication instanceof Authentication && $authentication->getUser()
             ]);
 
         $login_required = $routes[$this->route]['login'] ?? false;

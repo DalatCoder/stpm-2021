@@ -17,6 +17,7 @@ class NJBaseController
     public function get_entrypoint_args(array $args)
     {
         $this->entrypoint_arguments = $args;
+        $this->view_handler->set_general_args($args);
     }
     
     public function handle_on_invalid_authentication(array $args)
