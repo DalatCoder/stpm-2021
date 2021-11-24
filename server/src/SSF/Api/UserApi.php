@@ -50,7 +50,8 @@ class UserApi
                 'username' => $new_user->username,
                 'email' => $new_user->email,
                 'display_name' => $new_user->display_name,
-                'avatar' => $new_user->avatar
+                'avatar' => $new_user->avatar,
+                'created_at' => $new_user->created_at
             ];
             
             $this->response_json([
