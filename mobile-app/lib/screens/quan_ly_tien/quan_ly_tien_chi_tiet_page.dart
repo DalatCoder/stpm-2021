@@ -1,10 +1,12 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/api/quan_ly_tien_api.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/components/nut_bam.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/components/rounded_summary_box.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/components/rounded_summary_card.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/components/transaction_iten.dart';
+import 'package:quan_ly_chi_tieu_ca_nhan/models/nguoi_dung.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/models/quan_ly_tien_thong_ke_chi_tiet.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/models/quan_ly_tien_thong_ke_khoan_chi.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/models/quan_ly_tien_thong_ke_nguon_thu.dart';
@@ -15,12 +17,12 @@ import 'package:quan_ly_chi_tieu_ca_nhan/utils/constants.dart';
 
 class QuanLyTienChiTietPage extends StatefulWidget {
   final int quanLyTienID;
-  final int idNguoiDung;
+  final NguoiDung nguoiDung;
   final Function onChanged;
 
   QuanLyTienChiTietPage({
     @required this.quanLyTienID,
-    @required this.idNguoiDung,
+    @required this.nguoiDung,
     this.onChanged,
   });
 
@@ -35,7 +37,7 @@ class _QuanLyTienChiTietPageState extends State<QuanLyTienChiTietPage> {
   QuanLyTienApi _quanLyTienApi = QuanLyTienApi();
 
   QuanLyTienThongKeChiTiet thongKe = QuanLyTienThongKeChiTiet();
-  List<QuanLyTienThongKeNguonThu> dsNguonThu = [];
+  List<dynamic> dsNguonThu = [];
   List<QuanLyTienThongKeKhoanChi> dsKhoanChi = [];
 
   void getThongKe() async {
@@ -50,8 +52,7 @@ class _QuanLyTienChiTietPageState extends State<QuanLyTienChiTietPage> {
   }
 
   void getDanhSachNguonThu() async {
-    List<QuanLyTienThongKeNguonThu> data = await _quanLyTienApi
-        .getQuanLyTienThongKeNguonThuTongQuan(widget.quanLyTienID);
+    var data = await _quanLyTienApi.getDanhSachNguonThu(widget.quanLyTienID);
 
     if (data != null) {
       setState(() {
@@ -75,12 +76,14 @@ class _QuanLyTienChiTietPageState extends State<QuanLyTienChiTietPage> {
     List<TransactionItem> widgets = [];
 
     for (var nguonThu in dsNguonThu) {
+      var amount = int.tryParse(nguonThu["amount"]);
+
       TransactionItem item = TransactionItem(
         barColor: colorPicker.random(),
-        icon: nguonThu.icon,
-        iconColor: nguonThu.iconColor,
-        amount: '+ ${currencyFormat.format(nguonThu.soTien)}',
-        title: '${nguonThu.nhom}',
+        icon: FontAwesomeIcons.home,
+        iconColor: Colors.purple,
+        amount: '+ ${currencyFormat.format(amount)}',
+        title: '${nguonThu["category"]["name"]}',
         textColor: Colors.green,
       );
 
@@ -111,9 +114,9 @@ class _QuanLyTienChiTietPageState extends State<QuanLyTienChiTietPage> {
 
   @override
   void initState() {
-    getThongKe();
+    // getThongKe();
     getDanhSachNguonThu();
-    getDanhSachKhoanChi();
+    // getDanhSachKhoanChi();
     super.initState();
   }
 
@@ -142,9 +145,9 @@ class _QuanLyTienChiTietPageState extends State<QuanLyTienChiTietPage> {
                       return ThemKhoanThuPage(
                         idQuanLyTien: widget.quanLyTienID,
                         onSuccess: () {
-                          getThongKe();
+                          // getThongKe();
                           getDanhSachNguonThu();
-                          getDanhSachKhoanChi();
+                          // getDanhSachKhoanChi();
 
                           if (widget.onChanged != null) widget.onChanged();
                         },
@@ -244,11 +247,11 @@ class _QuanLyTienChiTietPageState extends State<QuanLyTienChiTietPage> {
                       builder: (context) {
                         return LichSuChiTieuPage(
                           quanLyTienID: widget.quanLyTienID,
-                          idNguoiDung: widget.idNguoiDung,
+                          nguoiDung: widget.nguoiDung,
                           onChanged: () {
-                            getThongKe();
+                            // getThongKe();
                             getDanhSachNguonThu();
-                            getDanhSachKhoanChi();
+                            // getDanhSachKhoanChi();
 
                             if (widget.onChanged != null) widget.onChanged();
                           },

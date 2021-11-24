@@ -12,14 +12,14 @@ import 'package:quan_ly_chi_tieu_ca_nhan/utils/constants.dart';
 
 class QuanLyTienApi {
   final String _url = "$kURL/api/v1/wallets/by-user";
+  final String _urlGetAllIncomeCategories = "$kURL/api/v1/categories/incomes";
   final String _urlThemQuanLyTien = "$kURL/api/v1/wallets";
   final String _urlThongKeTongQuan = '$kURL/api/quanlytien/thongketongquan';
   final String _urlThongKeChiTiet = '$kURL/api/quanlytien/thongkechitiet';
-  final String _urlThongKeNguonThuTongQuan =
-      '$kURL/api/quanlytien/thongkenguonthu';
+  final String _urlThongKeNguonThuTongQuan = '$kURL/api/v1/wallets/logs';
   final String _urlThongKeKhoanchiTongQuan =
       '$kURL/api/quanlytien/thongkekhoanchi';
-  final String _urlThemNguonThu = "$kURL/api/quanlytien/nguonthu";
+  final String _urlThemNguonThu = "$kURL/api/v1/wallet-logs";
 
   dynamic myEncode(dynamic item) {
     if (item is DateTime) {
@@ -84,27 +84,20 @@ class QuanLyTienApi {
     return QuanLyTienThongKeChiTiet.fromJson(jsonDecode(response.body));
   }
 
-  Future<List<QuanLyTienThongKeNguonThu>> getQuanLyTienThongKeNguonThuTongQuan(
-      int quanLyTienID) async {
+  Future<List<dynamic>> getDanhSachNguonThu(int quanLyTienID) async {
     http.Response response = await http.get(
-      '$_urlThongKeNguonThuTongQuan?quanlytien_id=$quanLyTienID',
+      '$_urlThongKeNguonThuTongQuan?id=$quanLyTienID',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
 
-    if (response.statusCode != 200) return null;
+    if (response.statusCode != 200) return [];
 
-    List<dynamic> list = jsonDecode(response.body);
+    var responseBody = jsonDecode(response.body);
+    List<dynamic> list = responseBody["data"];
 
-    List<QuanLyTienThongKeNguonThu> dsNguonThu = [];
-    for (var json in list) {
-      QuanLyTienThongKeNguonThu nguonThu =
-          QuanLyTienThongKeNguonThu.fromJson(json);
-      dsNguonThu.add(nguonThu);
-    }
-
-    return dsNguonThu;
+    return list;
   }
 
   Future<List<QuanLyTienThongKeKhoanChi>> getQuanLyTienThongKeKhoanChiTongQuan(
@@ -128,6 +121,22 @@ class QuanLyTienApi {
     }
 
     return dsKhoanChi;
+  }
+
+  Future<List<dynamic>> getAllIncomesCategory() async {
+    http.Response response = await http.get(
+      '$_urlGetAllIncomeCategories',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode != 200) return null;
+
+    var jsonBody = jsonDecode(response.body);
+    List<dynamic> list = jsonBody["data"];
+
+    return list;
   }
 
   Future<bool> themQuanLyTien(
@@ -157,13 +166,19 @@ class QuanLyTienApi {
   }
 
   Future<bool> themNguonThu({int idQuanLyTien, int soTien, String nhom}) async {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd').format(now);
+
     var body = {
-      "QuanLyTienID": idQuanLyTien,
-      "SoTien": soTien,
-      "Nhom": nhom,
+      "wallet_id": idQuanLyTien,
+      "amount": soTien,
+      "category_id": nhom,
+      "type": "in",
+      "log_date": formattedDate
     };
 
     var bodyJson = jsonEncode(body);
+
     http.Response response = await http.post(
       _urlThemNguonThu,
       headers: <String, String>{
@@ -172,7 +187,7 @@ class QuanLyTienApi {
       body: bodyJson,
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       return true;
     }
     return false;

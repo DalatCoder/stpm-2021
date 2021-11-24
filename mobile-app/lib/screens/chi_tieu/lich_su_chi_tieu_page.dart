@@ -6,18 +6,19 @@ import 'package:quan_ly_chi_tieu_ca_nhan/components/rounded_summary_card.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/components/transaction_iten.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/models/chi_tiet_chi_tieu.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/models/chi_tieu.dart';
+import 'package:quan_ly_chi_tieu_ca_nhan/models/nguoi_dung.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/screens/chi_tieu/them_chi_tieu_page.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/utils/constants.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/utils/color_picker.dart';
 
 class LichSuChiTieuPage extends StatefulWidget {
   final int quanLyTienID;
-  final int idNguoiDung;
+  final NguoiDung nguoiDung;
   final Function onChanged;
 
   LichSuChiTieuPage({
     @required this.quanLyTienID,
-    @required this.idNguoiDung,
+    @required this.nguoiDung,
     this.onChanged,
   });
 
@@ -43,7 +44,7 @@ class _LichSuChiTieuPageState extends State<LichSuChiTieuPage> {
     if (data != null) {
       List<ChiTietChiTieu> raw = [];
       if (data.length > 0) {
-        raw = await chiTieuAPI.layDanhSachChiTietChiTieu(data[0].id);
+        // raw = await chiTieuAPI.layDanhSachChiTietChiTieu(data[0].id);
       }
 
       setState(() {
@@ -117,7 +118,7 @@ class _LichSuChiTieuPageState extends State<LichSuChiTieuPage> {
                   Navigator.push(context, MaterialPageRoute(
                     builder: (context) {
                       return ThemChiTieuPage(
-                        idNguoiDung: widget.idNguoiDung,
+                        idNguoiDung: widget.nguoiDung.id,
                         onSuccess: () {
                           getDanhSachChiTieu();
                           if (widget.onChanged != null) widget.onChanged();

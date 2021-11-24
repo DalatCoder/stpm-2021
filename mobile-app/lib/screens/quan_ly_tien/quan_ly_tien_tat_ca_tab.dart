@@ -138,10 +138,10 @@ class _QuanLyTienTatCaTabState extends State<QuanLyTienTatCaTab> {
                         builder: (context) {
                           return QuanLyTienChiTietPage(
                             quanLyTienID: quanLyTien.id,
-                            idNguoiDung: widget.nguoiDung.id,
+                            nguoiDung: widget.nguoiDung,
                             onChanged: () {
-                              getThongKeTongQuan();
-                              getDanhSachQuanLyTien();
+                              // getThongKeTongQuan();
+                              // getDanhSachQuanLyTien();
                             },
                           );
                         },
