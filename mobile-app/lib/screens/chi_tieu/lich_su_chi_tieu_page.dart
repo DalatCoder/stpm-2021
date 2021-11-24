@@ -44,9 +44,10 @@ class _LichSuChiTieuPageState extends State<LichSuChiTieuPage> {
         widget.nguoiDung, widget.quanLyTienID);
 
     if (data != null) {
-      List<ChiTietChiTieu> raw = [];
+      List<dynamic> raw = [];
       if (data.length > 0) {
-        // raw = await chiTieuAPI.layDanhSachChiTietChiTieu( widget.nguoiDung, data[0].ngay, widget.quanLyTienID);
+        raw = await chiTieuAPI.layDanhSachChiTietChiTieu(
+            widget.nguoiDung, data[0].ngay, widget.quanLyTienID);
       }
 
       setState(() {
@@ -175,7 +176,7 @@ class _LichSuChiTieuPageState extends State<LichSuChiTieuPage> {
                       icon: FontAwesomeIcons.accusoft,
                       iconColor: Colors.purple,
                       amount: '- ${currencyFormat.format(amount)}',
-                      title: '${dsChiTietChiTieu[index].ten}',
+                      title: '${dsChiTietChiTieu[index]["title"]}',
                     );
                   },
                 ),

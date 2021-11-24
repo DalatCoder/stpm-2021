@@ -46,22 +46,26 @@ class ChiTieuAPI {
 
   Future<List<dynamic>> layDanhSachChiTietChiTieu(
       NguoiDung nguoiDung, DateTime ngay, int walletId) async {
-    String formattedDate = DateFormat('yyyy-MM-dd').format(ngay);
+    try {
+      String formattedDate = DateFormat('yyyy-MM-dd').format(ngay);
 
-    final http.Response response = await http.get(
-      '$_urlChiTietChiTieu?date=$formattedDate&wallet_id=$walletId',
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Cookie': 'PHPSESSID=' + nguoiDung.sid
-      },
-    );
+      final http.Response response = await http.get(
+        '$_urlChiTietChiTieu?date=$formattedDate&wallet_id=$walletId',
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Cookie': 'PHPSESSID=' + nguoiDung.sid
+        },
+      );
 
-    if (response.statusCode != 200) return null;
+      if (response.statusCode != 200) return [];
 
-    var jsonBody = jsonDecode(response.body);
-    List<dynamic> list = jsonBody["data"];
+      var jsonBody = jsonDecode(response.body);
+      List<dynamic> list = jsonBody["data"];
 
-    return list;
+      return list;
+    } on Exception catch (_) {
+      return [];
+    }
 
     // List<ChiTietChiTieu> dsChiTietChiTieu = [];
     // for (var json in list) {
