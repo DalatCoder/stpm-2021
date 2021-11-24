@@ -54,8 +54,8 @@ class WalletLogModel
         
         foreach ($all_logs as $log) {
             if (!isset($aggregates[$log->{WalletLogEntity::KEY_LOG_DATE}]))
-                $aggregates[$log->{WalletLogEntity::KEY_LOG_DATE}] = [
-                    'date' => $log->{WalletLogEntity::KEY_LOG_DATE}, 
+                $aggregates[$log->get_log_date()] = [
+                    'date' => $log->get_log_date(), 
                     'total' => 0,
                     'counter' => 0,
                     'wallet_id' => $wallet_id
@@ -73,8 +73,20 @@ class WalletLogModel
         return $results;
     }
     
-    public function get_all_by_date($date)
+    public function get_all_by_date($wallet_id, $date)
     {
+        $all_logs = $this->wallet_log_table->find(WalletLogEntity::KEY_WALLET_ID, $wallet_id);
         
+        $filtered = [];
+        
+        foreach ($all_logs as $log) {
+            $log_date = $log->get_log_date();
+            
+            if ($log_date->format('Y-m-d') == $date) {
+                $filtered[] = $log;
+            }
+        }
+        
+        return $filtered;
     }
 }

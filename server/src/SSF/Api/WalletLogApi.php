@@ -2,6 +2,7 @@
 
 namespace SSF\Api;
 
+use Ninja\Authentication;
 use Ninja\NinjaException;
 use Ninja\NJTrait\Jsonable;
 use SSF\Entity\WalletLogEntity;
@@ -12,10 +13,12 @@ class WalletLogApi
     use Jsonable;
 
     private $wallet_log_model;
+    private $authentication_helper;
 
-    public function __construct(WalletLogModel $wallet_log_model)
+    public function __construct(WalletLogModel $wallet_log_model, Authentication $authentication_helper)
     {
         $this->wallet_log_model = $wallet_log_model;
+        $this->authentication_helper = $authentication_helper;
     }
 
     public function index()
@@ -75,6 +78,32 @@ class WalletLogApi
     
     public function get_logs_by_date()
     {
-        
+        try {
+            if (!$this->authentication_helper->isLoggedIn())
+                throw new NinjaException('Bạn phải đăng nhập để tiếp tục', 403);
+
+            $date = $_GET['date'] ?? (new \DateTime())->format('Y-m-d');
+            $wallet_id = $_GET['wallet_id'] ?? null;
+            
+            if (is_null($wallet_id))
+                throw new NinjaException('Bạn phải truyền tham số wallet_id');
+
+            $logs = $this->wallet_log_model->get_all_by_date($wallet_id, $date);
+            
+            foreach ($logs as $log) {
+                $log->category = $log->get_category();
+            }
+            
+            $this->response_json([
+                'status' => 'success',
+                'data' => $logs
+            ]);
+        } catch (NinjaException $exception) {
+            $this->response_json([
+                'status' => 'fail',
+                'data' => null,
+                'message' => $exception->getMessage()
+            ], $exception->get_status_code());
+        }
     }    
 }

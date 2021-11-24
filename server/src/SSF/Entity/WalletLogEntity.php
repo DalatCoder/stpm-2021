@@ -13,6 +13,7 @@ class WalletLogEntity
     const KEY_ID = 'id';
     const KEY_WALLET_ID = 'wallet_id';
     const KEY_CATEGORY_ID = 'category_id';
+    const KEY_TITLE = 'title';
     const KEY_TYPE = 'type';
     const KEY_AMOUNT = 'amount';
     const KEY_LOG_DATE = 'log_date';
@@ -57,8 +58,12 @@ class WalletLogEntity
         return $this->category_entity;
     }
     
-    public function get_log_date($format = 'Y-m-d')
+    public function get_log_date($format = 'Y-m-d H:i:s')
     {
-        return $this->log_date->format($format);
+        if ($this->log_date instanceof \DateTime)
+            return $this->log_date->format($format);
+        
+        $date_obj = \DateTime::createFromFormat($format, $this->log_date);
+        return $date_obj ?? null;
     }
 }
