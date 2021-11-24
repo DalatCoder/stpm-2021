@@ -25,6 +25,7 @@ class WalletLogEntity
     public $id;
     public $wallet_id;
     public $category_id;
+    public $title;
     public $type;
     public $amount;
     public $log_date;

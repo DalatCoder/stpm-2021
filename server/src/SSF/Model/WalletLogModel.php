@@ -27,6 +27,7 @@ class WalletLogModel
         $type = $args[WalletLogEntity::KEY_TYPE] ?? null;
         $amount = $args[WalletLogEntity::KEY_AMOUNT] ?? null;
         $log_date = $args[WalletLogEntity::KEY_LOG_DATE] ?? null;
+        $log_title = $args[WalletLogEntity::KEY_TITLE] ?? null;
 
         $format = $args['format'] ?? null;
         if (!$format)
@@ -41,6 +42,7 @@ class WalletLogModel
             WalletLogEntity::KEY_WALLET_ID => $wallet_id,
             WalletLogEntity::KEY_CATEGORY_ID => $category_id,
             WalletLogEntity::KEY_TYPE => $type,
+            WalletLogEntity::KEY_TITLE => $log_title,
             WalletLogEntity::KEY_AMOUNT => $amount,
             WalletLogEntity::KEY_LOG_DATE => $log_date
         ]);
@@ -83,9 +85,17 @@ class WalletLogModel
         $filtered = [];
         
         foreach ($all_logs as $log) {
+            if ($log->{WalletLogEntity::KEY_TYPE} == WalletLogEntity::TYPE_INCOME)
+                continue;
+            
             $log_date = $log->get_log_date();
             
-            if ($log_date->format('Y-m-d') == $date) {
+            $parts = explode(" ", $log_date);
+            if (count($parts) != 2) continue;
+            
+            $log_date = $parts[0];
+            
+            if ($log_date == $date) {
                 $filtered[] = $log;
             }
         }
