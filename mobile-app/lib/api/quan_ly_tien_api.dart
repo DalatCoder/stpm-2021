@@ -13,6 +13,7 @@ import 'package:quan_ly_chi_tieu_ca_nhan/utils/constants.dart';
 class QuanLyTienApi {
   final String _url = "$kURL/api/v1/wallets/by-user";
   final String _urlGetAllIncomeCategories = "$kURL/api/v1/categories/incomes";
+  final String _urlGetAllOutcomeCategories = "$kURL/api/v1/categories/outcomes";
   final String _urlThemQuanLyTien = "$kURL/api/v1/wallets";
   final String _urlThongKeTongQuan = '$kURL/api/quanlytien/thongketongquan';
   final String _urlThongKeChiTiet = '$kURL/api/quanlytien/thongkechitiet';
@@ -126,6 +127,22 @@ class QuanLyTienApi {
   Future<List<dynamic>> getAllIncomesCategory() async {
     http.Response response = await http.get(
       '$_urlGetAllIncomeCategories',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode != 200) return null;
+
+    var jsonBody = jsonDecode(response.body);
+    List<dynamic> list = jsonBody["data"];
+
+    return list;
+  }
+
+  Future<List<dynamic>> getAllOutcomesCategory() async {
+    http.Response response = await http.get(
+      '$_urlGetAllOutcomeCategories',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

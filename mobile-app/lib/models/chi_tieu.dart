@@ -15,10 +15,10 @@ class ChiTieu {
 
   factory ChiTieu.fromJson(Map<String, dynamic> json) {
     return ChiTieu(
-      id: json['id'],
-      quanLyTienHienCoId: json['quanLyTienHienCoId'],
-      tongChi: json['tongChi'],
-      ngay: DateTime.parse(json['ngay'].toString()),
+      id: 0,
+      quanLyTienHienCoId: int.tryParse(json['wallet_id']),
+      tongChi: json['total'],
+      ngay: DateTime.parse(json['date'].toString()),
     );
   }
 }

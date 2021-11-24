@@ -1,5 +1,6 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/api/chi_tieu_api.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/components/outcome_date_box.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/components/rounded_summary_card.dart';
@@ -33,18 +34,20 @@ class _LichSuChiTieuPageState extends State<LichSuChiTieuPage> {
   ChiTieuAPI chiTieuAPI = ChiTieuAPI();
 
   List<ChiTieu> dsChiTieu = [];
-  List<ChiTietChiTieu> dsChiTietChiTieu = [];
+  List<dynamic> dsChiTietChiTieu = [];
   DateTime ngayChiTieu = DateTime.now();
   int tongTienChiTieu = 0;
   int currentSelectedIndex = 0;
 
   Future<void> getDanhSachChiTieu() async {
-    var data = await chiTieuAPI.layDanhSachChiTieu(widget.quanLyTienID);
+    var data = await chiTieuAPI.layDanhSachChiTieu(
+        widget.nguoiDung, widget.quanLyTienID);
 
     if (data != null) {
       List<ChiTietChiTieu> raw = [];
       if (data.length > 0) {
-        // raw = await chiTieuAPI.layDanhSachChiTietChiTieu(data[0].id);
+        raw = await chiTieuAPI.layDanhSachChiTietChiTieu(
+            widget.nguoiDung, data[0].ngay, widget.quanLyTienID);
       }
 
       setState(() {
@@ -60,7 +63,8 @@ class _LichSuChiTieuPageState extends State<LichSuChiTieuPage> {
   }
 
   Future<void> getDanhSachChiTietChiTieu(int chiTieuId) async {
-    var data = await chiTieuAPI.layDanhSachChiTietChiTieu(chiTieuId);
+    var data = await chiTieuAPI.layDanhSachChiTietChiTieu(
+        widget.nguoiDung, DateTime.now(), widget.quanLyTienID);
 
     if (data != null) {
       setState(() {
@@ -164,12 +168,14 @@ class _LichSuChiTieuPageState extends State<LichSuChiTieuPage> {
                   padding: EdgeInsets.only(left: 5.0),
                   itemCount: dsChiTietChiTieu.length,
                   itemBuilder: (context, index) {
+                    var amount =
+                        int.tryParse(dsChiTietChiTieu[index]["amount"]);
+
                     return TransactionItem(
                       barColor: colorPicker.random(),
-                      icon: dsChiTietChiTieu[index].icon,
-                      iconColor: dsChiTietChiTieu[index].iconColor,
-                      amount:
-                          '- ${currencyFormat.format(dsChiTietChiTieu[index].soTien)}',
+                      icon: FontAwesomeIcons.accusoft,
+                      iconColor: Colors.purple,
+                      amount: '- ${currencyFormat.format(amount)}',
                       title: '${dsChiTietChiTieu[index].ten}',
                     );
                   },
