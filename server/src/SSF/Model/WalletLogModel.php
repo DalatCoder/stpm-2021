@@ -53,7 +53,10 @@ class WalletLogModel
         $aggregates = [];
         
         foreach ($all_logs as $log) {
-            if (!isset($aggregates[$log->{WalletLogEntity::KEY_LOG_DATE}]))
+            if ($log->{WalletLogEntity::KEY_TYPE} == WalletLogEntity::TYPE_INCOME)
+                continue;
+            
+            if (!isset($aggregates[$log->get_log_date()]))
                 $aggregates[$log->get_log_date()] = [
                     'date' => $log->get_log_date(), 
                     'total' => 0,

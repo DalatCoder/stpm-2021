@@ -64,6 +64,9 @@ class WalletLogEntity
             return $this->log_date->format($format);
         
         $date_obj = \DateTime::createFromFormat($format, $this->log_date);
-        return $date_obj ?? null;
+        if ($date_obj)
+            return $date_obj->format($format);
+        
+        return null;
     }
 }
