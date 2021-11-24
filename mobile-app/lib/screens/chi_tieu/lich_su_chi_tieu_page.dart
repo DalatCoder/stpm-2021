@@ -46,8 +46,7 @@ class _LichSuChiTieuPageState extends State<LichSuChiTieuPage> {
     if (data != null) {
       List<ChiTietChiTieu> raw = [];
       if (data.length > 0) {
-        raw = await chiTieuAPI.layDanhSachChiTietChiTieu(
-            widget.nguoiDung, data[0].ngay, widget.quanLyTienID);
+        // raw = await chiTieuAPI.layDanhSachChiTietChiTieu( widget.nguoiDung, data[0].ngay, widget.quanLyTienID);
       }
 
       setState(() {
