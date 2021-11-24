@@ -9,6 +9,7 @@ use SSF\Api\CategoryApi;
 use SSF\Api\UserApi;
 use SSF\Api\WalletApi;
 use SSF\Api\WalletLogApi;
+use SSF\Controller\HomeController;
 use SSF\Entity\CategoryEntity;
 use SSF\Entity\UserEntity;
 use SSF\Entity\WalletEntity;
@@ -24,7 +25,7 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
     private $wallet_table;
     private $category_table;
     private $wallet_log_table;
-    
+
     private $authentication_helper;
 
     public function __construct()
@@ -41,7 +42,7 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
             &$this->wallet_table,
             &$this->category_table
         ]);
-        
+
         $this->authentication_helper = new Authentication($this->user_table, UserEntity::KEY_USERNAME, UserEntity::KEY_PASSWORD);
     }
 
@@ -55,7 +56,7 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
 
         $category_model = new CategoryModel($this->category_table);
         $category_api_handler = new CategoryApi($category_model);
-        
+
         $wallet_log_model = new WalletLogModel($this->wallet_log_table);
         $wallet_log_api_handler = new WalletLogApi($wallet_log_model, $this->authentication_helper);
         $auth_api_handler = new AuthApi($this->authentication_helper);
@@ -65,8 +66,11 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
         $category_routes = $this->get_category_api_routes($category_api_handler);
         $wallet_log_routes = $this->get_walletlog_api_routes($wallet_log_api_handler);
         $auth_routes = $this->get_auth_api_routes($auth_api_handler);
+        
+        $home_controller = new HomeController();
+        $home_controller_routes = $this->get_controller_home_routes($home_controller);
 
-        return $user_routes + $wallet_routes + $category_routes + $wallet_log_routes + $auth_routes;
+        return $user_routes + $wallet_routes + $category_routes + $wallet_log_routes + $auth_routes + $home_controller_routes;
     }
 
     public function getAuthentication(): ?\Ninja\Authentication
@@ -77,6 +81,18 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
     public function checkPermission($permission): ?bool
     {
         return null;
+    }
+
+    private function get_controller_home_routes(HomeController $home_controller)
+    {
+        return [
+            '/' => [
+                'GET' => [
+                    'controller' => $home_controller,
+                    'action' => 'home'
+                ]
+            ]
+        ];
     }
 
     private function get_user_api_routes(UserApi $user_api_handler): array
@@ -178,7 +194,7 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
             ]
         ];
     }
-    
+
     private function get_auth_api_routes(AuthApi $auth_api_handler)
     {
         return [
