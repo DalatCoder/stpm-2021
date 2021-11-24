@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/api/chi_tieu_api.dart';
+import 'package:quan_ly_chi_tieu_ca_nhan/api/quan_ly_tien_api.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/components/nut_bam.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/utils/constants.dart';
 
@@ -16,9 +17,30 @@ class ThemChiTieuPage extends StatefulWidget {
 class _ThemChiTieuPageState extends State<ThemChiTieuPage> {
   String tenChiTieu = "";
   String nhom = "Thức ăn";
+  String wallet_id = "";
   int soTien = 0;
+  List<dynamic> outcomeCategories = [];
+  List<dynamic> walletOptions = [];
 
   ChiTieuAPI chiTieuAPI = ChiTieuAPI();
+  QuanLyTienApi quanLyTienApi = QuanLyTienApi();
+
+  getOutcomeCategories() async {
+    var data = await quanLyTienApi.getAllOutcomesCategory();
+    var wallets = await quanLyTienApi.getAllWalletsByUserId(widget.idNguoiDung);
+
+    setState(() {
+      outcomeCategories = data;
+      walletOptions = wallets;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    getOutcomeCategories();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,196 +101,140 @@ class _ThemChiTieuPageState extends State<ThemChiTieuPage> {
                         elevation: 0.0,
                         color: Colors.white,
                         child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
+                            children: outcomeCategories
+                                .asMap()
+                                .map((key, value) => MapEntry(
+                                    key,
                                     Container(
-                                      height: 30.0,
-                                      width: 7.0,
-                                      decoration: BoxDecoration(
-                                        color: Colors.blueAccent,
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                    ),
-                                    SizedBox(width: 10.0),
-                                    Text(
-                                      'Thức ăn',
-                                      style: kNguonThuItemStyle,
-                                    ),
-                                  ],
-                                ),
-                                Radio(
-                                  value: "Thức ăn",
-                                  groupValue: nhom,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      nhom = value;
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 1.0,
-                              width: double.infinity,
-                              child: Container(color: Colors.grey.shade200),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: 30.0,
-                                      width: 7.0,
-                                      decoration: BoxDecoration(
-                                        color: Colors.purpleAccent,
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                    ),
-                                    SizedBox(width: 10.0),
-                                    Text(
-                                      'Bạn bè',
-                                      style: kNguonThuItemStyle,
-                                    ),
-                                  ],
-                                ),
-                                Radio(
-                                  value: "Bạn bè",
-                                  groupValue: nhom,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      nhom = value;
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 1.0,
-                              width: double.infinity,
-                              child: Container(color: Colors.grey.shade200),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: 30.0,
-                                      width: 7.0,
-                                      decoration: BoxDecoration(
-                                        color: Colors.pinkAccent,
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                    ),
-                                    SizedBox(width: 10.0),
-                                    Text(
-                                      'Quần áo',
-                                      style: kNguonThuItemStyle,
-                                    ),
-                                  ],
-                                ),
-                                Radio(
-                                  value: "Quần áo",
-                                  groupValue: nhom,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      nhom = value;
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 1.0,
-                              width: double.infinity,
-                              child: Container(color: Colors.grey.shade200),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: 30.0,
-                                      width: 7.0,
-                                      decoration: BoxDecoration(
-                                        color: Colors.greenAccent,
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                    ),
-                                    SizedBox(width: 10.0),
-                                    Text(
-                                      'Di chuyển',
-                                      style: kNguonThuItemStyle,
-                                    ),
-                                  ],
-                                ),
-                                Radio(
-                                  value: "Di chuyển",
-                                  groupValue: nhom,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      nhom = value;
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 1.0,
-                              width: double.infinity,
-                              child: Container(color: Colors.grey.shade200),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      height: 30.0,
-                                      width: 7.0,
-                                      decoration: BoxDecoration(
-                                        color: Colors.yellow,
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                    ),
-                                    SizedBox(width: 10.0),
-                                    Text(
-                                      'Khác',
-                                      style: kNguonThuItemStyle,
-                                    ),
-                                  ],
-                                ),
-                                Radio(
-                                  value: "Khác",
-                                  groupValue: nhom,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      nhom = value;
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 12),
+                                        decoration: BoxDecoration(
+                                            border: Border(
+                                                bottom: BorderSide(
+                                                    color: key <
+                                                            outcomeCategories
+                                                                    .length -
+                                                                1
+                                                        ? Colors.grey
+                                                        : Colors.transparent,
+                                                    width: 1.0))),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              height: 30.0,
+                                              width: 7.0,
+                                              margin: const EdgeInsets.only(
+                                                  right: 12),
+                                              decoration: BoxDecoration(
+                                                color: Colors.blueAccent,
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                              ),
+                                            ),
+                                            Text(
+                                              value["name"],
+                                              style: kNguonThuItemStyle,
+                                            ),
+                                            Spacer(),
+                                            Radio(
+                                              value: value["id"],
+                                              groupValue: nhom,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  nhom = value;
+                                                });
+                                              },
+                                            ),
+                                          ],
+                                        ))))
+                                .values
+                                .toList()),
                       ),
-                    )
+                    ),
+                    SizedBox(height: 15.0),
+                  ],
+                ),
+              ),
+              SizedBox(height: 30.0),
+              Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Chọn kế hoạch chi tiêu',
+                      style: kTitleTextStyle,
+                    ),
+                    SizedBox(height: 15.0),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          top: BorderSide(width: 1.0, color: Colors.grey),
+                          bottom: BorderSide(width: 1.0, color: Colors.grey),
+                          left: BorderSide(width: 1.0, color: Colors.grey),
+                          right: BorderSide(width: 1.0, color: Colors.grey),
+                        ),
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                      padding: EdgeInsets.all(15.0),
+                      child: Card(
+                        elevation: 0.0,
+                        color: Colors.white,
+                        child: Column(
+                            children: walletOptions
+                                .asMap()
+                                .map((key, value) => MapEntry(
+                                    key,
+                                    Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 12),
+                                        decoration: BoxDecoration(
+                                            border: Border(
+                                                bottom: BorderSide(
+                                                    color: key <
+                                                            walletOptions
+                                                                    .length -
+                                                                1
+                                                        ? Colors.grey
+                                                        : Colors.transparent,
+                                                    width: 1.0))),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              height: 30.0,
+                                              width: 7.0,
+                                              margin: const EdgeInsets.only(
+                                                  right: 12),
+                                              decoration: BoxDecoration(
+                                                color: Colors.blueAccent,
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                              ),
+                                            ),
+                                            Text(
+                                              value["date_begin"],
+                                              style: kNguonThuItemStyle,
+                                            ),
+                                            Spacer(),
+                                            Radio(
+                                              value: value["id"],
+                                              groupValue: wallet_id,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  wallet_id = value;
+                                                });
+                                              },
+                                            ),
+                                          ],
+                                        ))))
+                                .values
+                                .toList()),
+                      ),
+                    ),
+                    SizedBox(height: 15.0),
                   ],
                 ),
               ),
@@ -300,12 +266,12 @@ class _ThemChiTieuPageState extends State<ThemChiTieuPage> {
                 textName: 'Thêm chi tiêu',
                 onPressed: () async {
                   bool ketQua = await chiTieuAPI.themChiTieu(
-                    tenChiTieu: tenChiTieu,
-                    nhom: nhom,
-                    soTien: soTien,
-                    ngayChiTieu: DateTime.now(),
-                    idNguoiDung: widget.idNguoiDung,
-                  );
+                      tenChiTieu: tenChiTieu,
+                      nhom: nhom,
+                      soTien: soTien,
+                      ngayChiTieu: DateTime.now(),
+                      idNguoiDung: widget.idNguoiDung,
+                      walletId: wallet_id);
                   if (ketQua == true) {
                     if (widget.onSuccess != null) widget.onSuccess();
                     Navigator.pop(context);

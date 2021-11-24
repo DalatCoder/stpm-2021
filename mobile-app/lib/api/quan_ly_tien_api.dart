@@ -14,6 +14,7 @@ class QuanLyTienApi {
   final String _url = "$kURL/api/v1/wallets/by-user";
   final String _urlGetAllIncomeCategories = "$kURL/api/v1/categories/incomes";
   final String _urlGetAllOutcomeCategories = "$kURL/api/v1/categories/outcomes";
+  final String _urlGetAllWalletsByUserId = "$kURL/api/v1/wallets/by-user";
   final String _urlThemQuanLyTien = "$kURL/api/v1/wallets";
   final String _urlThongKeTongQuan = '$kURL/api/quanlytien/thongketongquan';
   final String _urlThongKeChiTiet = '$kURL/api/quanlytien/thongkechitiet';
@@ -122,6 +123,22 @@ class QuanLyTienApi {
     }
 
     return dsKhoanChi;
+  }
+
+  Future<List<dynamic>> getAllWalletsByUserId(int user_id) async {
+    http.Response response = await http.get(
+      "$_urlGetAllWalletsByUserId?id=$user_id",
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode != 200) return [];
+
+    var jsonBody = jsonDecode(response.body);
+    List<dynamic> list = jsonBody["data"];
+
+    return list;
   }
 
   Future<List<dynamic>> getAllIncomesCategory() async {

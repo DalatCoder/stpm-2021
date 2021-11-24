@@ -10,6 +10,7 @@ import 'package:quan_ly_chi_tieu_ca_nhan/utils/constants.dart';
 class ChiTieuAPI {
   final String _urlChiTieu = "$kURL/api/v1/wallet-logs/aggregate-by-date";
   final String _urlChiTietChiTieu = '$kURL/api/v1/wallet-logs/get-logs-by-date';
+  final String _urlNewOutcomeLog = "$kURL/api/v1/wallet-logs";
 
   dynamic myEncode(dynamic item) {
     if (item is DateTime) {
@@ -71,24 +72,25 @@ class ChiTieuAPI {
     // return dsChiTietChiTieu;
   }
 
-  Future<bool> themChiTieu({
-    String nhom,
-    String tenChiTieu,
-    int soTien,
-    DateTime ngayChiTieu,
-    int idNguoiDung,
-  }) async {
+  Future<bool> themChiTieu(
+      {String nhom,
+      String tenChiTieu,
+      int soTien,
+      DateTime ngayChiTieu,
+      int idNguoiDung,
+      var walletId}) async {
     var body = {
-      "Nhom": nhom,
-      "TenChiTieu": tenChiTieu,
-      "SoTien": soTien,
-      "NgayChiTieu": ngayChiTieu,
-      "IdNguoiDung": idNguoiDung,
+      "category_id": nhom,
+      "title": tenChiTieu,
+      "amount": soTien,
+      "log_date": DateFormat('yyyy-MM-dd').format(ngayChiTieu),
+      "wallet_id": walletId,
+      "type": "out"
     };
 
-    var bodyJson = JsonEncoder(myEncode).convert(body);
+    var bodyJson = jsonEncode(body);
     http.Response response = await http.post(
-      _urlChiTieu,
+      _urlNewOutcomeLog,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -98,7 +100,7 @@ class ChiTieuAPI {
     // print(bodyJson);
     // print(response.statusCode);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       return true;
     }
     return false;
