@@ -51,7 +51,7 @@ class UserApi
                 'email' => $new_user->email,
                 'display_name' => $new_user->display_name,
                 'avatar' => $new_user->avatar,
-                'created_at' => $new_user->created_at
+                'created_at' => (new \DateTime())->format('y-m-d H:i:s')
             ];
             
             $this->response_json([
