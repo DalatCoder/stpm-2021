@@ -26,12 +26,11 @@ class _QuanLyTienTatCaTabState extends State<QuanLyTienTatCaTab> {
   final dateFormat = new DateFormat('dd-MM-yyyy');
   final currencyFormat = new NumberFormat('###,###,###,###');
   List<ListQuanLyTien> dsQuanLyTien = [];
-  QuanLyTienThongKeTongQuan thongKe = QuanLyTienThongKeTongQuan();
+  var thongKe = QuanLyTienThongKeTongQuan();
 
   void getThongKeTongQuan() async {
     QuanLyTienApi api = QuanLyTienApi();
-    QuanLyTienThongKeTongQuan data =
-        await api.getQuanLyTienThongKeTongQuan(widget.nguoiDung.id);
+    var data = await api.getQuanLyTienThongKeTongQuan(widget.nguoiDung.id);
 
     if (data != null)
       setState(() {
@@ -41,7 +40,7 @@ class _QuanLyTienTatCaTabState extends State<QuanLyTienTatCaTab> {
 
   void getDanhSachQuanLyTien() async {
     QuanLyTienApi api = QuanLyTienApi();
-    List<ListQuanLyTien> list = await api.getAllQuanLyTien(widget.nguoiDung.id);
+    List<ListQuanLyTien> list = await api.getAllQuanLyTien(widget.nguoiDung);
 
     if (list != null)
       setState(() {
@@ -51,7 +50,7 @@ class _QuanLyTienTatCaTabState extends State<QuanLyTienTatCaTab> {
 
   @override
   void initState() {
-    getThongKeTongQuan();
+    // getThongKeTongQuan();
     getDanhSachQuanLyTien();
     super.initState();
   }
@@ -75,9 +74,9 @@ class _QuanLyTienTatCaTabState extends State<QuanLyTienTatCaTab> {
                 isScrollControlled: true,
                 builder: (context) => SingleChildScrollView(
                   child: ThemQuanLyTienPage(
-                    idNguoiDung: widget.nguoiDung.id,
+                    nguoiDung: widget.nguoiDung,
                     onSuccess: () {
-                      getThongKeTongQuan();
+                      // getThongKeTongQuan();
                       getDanhSachQuanLyTien();
                     },
                   ),
@@ -95,7 +94,7 @@ class _QuanLyTienTatCaTabState extends State<QuanLyTienTatCaTab> {
               RoundedSummaryBox(
                 title: 'Tổng số tiền đã chi tiêu',
                 money:
-                    '${currencyFormat.format(thongKe.tongSoTienDaChiTieu)} ₫',
+                    '100000', // ${currencyFormat.format(thongKe.tongSoTienDaChiTieu)} ₫
                 icon: Icons.money_off,
                 iconBgColor: Colors.purple[200],
                 iconColor: Colors.yellow,
@@ -103,7 +102,8 @@ class _QuanLyTienTatCaTabState extends State<QuanLyTienTatCaTab> {
               SizedBox(width: 20.0),
               RoundedSummaryBox(
                 title: 'Số lượng kế hoạch đã hoàn thành',
-                money: thongKe.tongSoKeHoachQuanLyDaHoanThanh.toString(),
+                money:
+                    '100', // thongKe.tongSoKeHoachQuanLyDaHoanThanh.toString()
                 icon: Icons.done_all,
                 iconBgColor: Colors.yellow[200],
                 iconColor: Colors.purple,

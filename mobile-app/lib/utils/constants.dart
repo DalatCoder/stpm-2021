@@ -36,9 +36,9 @@ const kPaddingMainPage = EdgeInsets.symmetric(
   horizontal: 10.0,
 );
 
-// const kURL = 'http://10.0.2.2:5000';
+const kURL = 'http://10.0.2.2:5000';
 // const kURL = 'http://localhost:5000';
-const kURL = 'https://stpm2021.dalathub.com';
+// const kURL = 'https://stpm2021.dalathub.com';
 
 const kNguonThuItemStyle = TextStyle(
   fontFamily: 'Lobster',

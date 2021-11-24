@@ -2,13 +2,14 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/api/quan_ly_tien_api.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/components/nut_bam.dart';
+import 'package:quan_ly_chi_tieu_ca_nhan/models/nguoi_dung.dart';
 import 'package:quan_ly_chi_tieu_ca_nhan/utils/constants.dart';
 
 class ThemQuanLyTienPage extends StatefulWidget {
-  final int idNguoiDung;
+  final NguoiDung nguoiDung;
   final Function onSuccess;
 
-  ThemQuanLyTienPage({@required this.idNguoiDung, this.onSuccess});
+  ThemQuanLyTienPage({@required this.nguoiDung, this.onSuccess});
 
   @override
   _ThemQuanLyTienPageState createState() => _ThemQuanLyTienPageState();
@@ -110,7 +111,7 @@ class _ThemQuanLyTienPageState extends State<ThemQuanLyTienPage> {
               textName: 'Tạo',
               onPressed: () async {
                 bool ketQua = await quanLyTienApi.themQuanLyTien(
-                  idNguoiDung: widget.idNguoiDung,
+                  nguoiDung: widget.nguoiDung,
                   ngayBD: ngayBD,
                   ngayKT: ngayKT,
                 );

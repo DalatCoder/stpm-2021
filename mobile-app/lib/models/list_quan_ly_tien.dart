@@ -13,10 +13,9 @@ class ListQuanLyTien {
 
   factory ListQuanLyTien.fromJson(Map<String, dynamic> json) {
     return ListQuanLyTien(
-      id: json['id'],
-      ngayBD: DateTime.parse(json['ngayBD']),
-      ngayKT: DateTime.parse(json['ngayKT']),
-      trangThai: json['trangThai'],
-    );
+        id: int.tryParse(json['id']),
+        ngayBD: DateTime.parse(json['date_begin']),
+        ngayKT: DateTime.parse(json['date_end']),
+        trangThai: false);
   }
 }
