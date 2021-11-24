@@ -135,7 +135,19 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
                     'controller' => $category_api_handler,
                     'action' => 'store'
                 ]
-            ]
+            ],
+            '/api/v1/categories/outcomes' => [
+                'GET' => [
+                    'controller' => $category_api_handler,
+                    'action' => 'get_all_outcomes'
+                ],
+            ],
+            '/api/v1/categories/incomes' => [
+                'GET' => [
+                    'controller' => $category_api_handler,
+                    'action' => 'get_all_incomes'
+                ],
+            ],
         ];
     }
 

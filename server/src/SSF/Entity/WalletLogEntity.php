@@ -43,12 +43,18 @@ class WalletLogEntity
     
     public function get_wallet()
     {
-        return $this->wallet_table->findById($this->wallet_id);
+        if (!$this->wallet_entity)
+            $this->wallet_entity = $this->wallet_table->findById($this->wallet_id);
+        
+        return $this->wallet_entity;
     }
     
     public function get_category()
     {
-        return $this->category_table->findById($this->category_id);
+        if (!$this->category_entity)
+            $this->category_entity = $this->category_table->findById($this->category_id);
+        
+        return $this->category_entity;
     }
     
     public function get_log_date($format = 'Y-m-d')

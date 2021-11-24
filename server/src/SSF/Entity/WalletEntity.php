@@ -44,8 +44,15 @@ class WalletEntity
     
     public function get_logs()
     {
-        if (!$this->wallet_log_entities)
-            $this->wallet_log_entities = $this->wallet_log_table->find(WalletLogEntity::KEY_WALLET_ID, $this->id);
+        if (!$this->wallet_log_entities) {
+            $logs = $this->wallet_log_table->find(WalletLogEntity::KEY_WALLET_ID, $this->id);
+            
+            foreach ($logs as $log) {
+                $log->category = $log->get_category();
+            }
+            
+            $this->wallet_log_entities = $logs;
+        }
         
         return $this->wallet_log_entities;
     }
