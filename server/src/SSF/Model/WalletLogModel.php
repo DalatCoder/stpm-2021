@@ -46,4 +46,35 @@ class WalletLogModel
         ]);
     }
     
+    public function aggregate_by_date($wallet_id)
+    {
+        $all_logs = $this->wallet_log_table->find(WalletLogEntity::KEY_WALLET_ID, $wallet_id) ?? [];
+        
+        $aggregates = [];
+        
+        foreach ($all_logs as $log) {
+            if (!isset($aggregates[$log->{WalletLogEntity::KEY_LOG_DATE}]))
+                $aggregates[$log->{WalletLogEntity::KEY_LOG_DATE}] = [
+                    'date' => $log->{WalletLogEntity::KEY_LOG_DATE}, 
+                    'total' => 0,
+                    'counter' => 0,
+                    'wallet_id' => $wallet_id
+                ];
+            
+            $aggregates[$log->{WalletLogEntity::KEY_LOG_DATE}]['total'] += $log->{WalletLogEntity::KEY_AMOUNT} ?? 0;
+            $aggregates[$log->{WalletLogEntity::KEY_LOG_DATE}]['counter'] ++;
+        }
+        
+        $results = [];
+        foreach ($aggregates as $key => $value) {
+            $results[] = $value;
+        }
+        
+        return $results;
+    }
+    
+    public function get_all_by_date($date)
+    {
+        
+    }
 }

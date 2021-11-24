@@ -60,4 +60,21 @@ class WalletLogApi
             ], 400);
         }
     }
+    
+    public function aggregate_by_date()
+    {
+        $wallet_id = $_GET['wallet_id'] ?? null;
+        
+        $response_data = $this->wallet_log_model->aggregate_by_date($wallet_id);
+        
+        $this->response_json([
+            'status' => 'success',
+            'data' => $response_data
+        ]);
+    }
+    
+    public function get_logs_by_date()
+    {
+        
+    }    
 }

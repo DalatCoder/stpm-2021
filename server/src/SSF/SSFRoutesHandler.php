@@ -151,17 +151,29 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
         ];
     }
 
-    private function get_walletlog_api_routes(WalletLogApi $category_api_handler): array
+    private function get_walletlog_api_routes(WalletLogApi $wallet_log_api_handler): array
     {
         return [
             '/api/v1/wallet-logs' => [
                 'GET' => [
-                    'controller' => $category_api_handler,
+                    'controller' => $wallet_log_api_handler,
                     'action' => 'index'
                 ],
                 'POST' => [
-                    'controller' => $category_api_handler,
+                    'controller' => $wallet_log_api_handler,
                     'action' => 'store'
+                ]
+            ],
+            '/api/v1/wallet-logs/aggregate-by-date' => [
+                'GET' => [
+                    'controller' => $wallet_log_api_handler,
+                    'action' => 'aggregate_by_date'
+                ]
+            ],
+            '/api/v1/wallet-logs/get-logs-by-date' => [
+                'GET' => [
+                    'controller' => $wallet_log_api_handler,
+                    'action' => 'get_logs_by_date'
                 ]
             ]
         ];
