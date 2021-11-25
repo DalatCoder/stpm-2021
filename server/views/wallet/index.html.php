@@ -60,7 +60,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($wallet->get_all_outcome_logs() as $key => $log): ?>
+                    <?php foreach ($wallet->get_logs() as $key => $log): ?>
                         <?php if ($log->type === 'in'): ?>
                             <tr class="table-success">
                                 <th scope="row"><?= $key + 1 ?></th>
