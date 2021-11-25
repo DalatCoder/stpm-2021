@@ -9,6 +9,7 @@ use SSF\Api\CategoryApi;
 use SSF\Api\UserApi;
 use SSF\Api\WalletApi;
 use SSF\Api\WalletLogApi;
+use SSF\Controller\AuthController;
 use SSF\Controller\HomeController;
 use SSF\Entity\CategoryEntity;
 use SSF\Entity\UserEntity;
@@ -69,13 +70,16 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
         
         $home_controller = new HomeController();
         $home_controller_routes = $this->get_controller_home_routes($home_controller);
+        
+        $auth_controller = new AuthController($this->authentication_helper);
+        $auth_controller_routes = $this->get_controller_auth_routes($auth_controller);
 
-        return $user_routes + $wallet_routes + $category_routes + $wallet_log_routes + $auth_routes + $home_controller_routes;
+        return $user_routes + $wallet_routes + $category_routes + $wallet_log_routes + $auth_routes + $home_controller_routes + $auth_controller_routes;
     }
 
     public function getAuthentication(): ?\Ninja\Authentication
     {
-        return null;
+        return $this->authentication_helper;
     }
 
     public function checkPermission($permission): ?bool
@@ -90,6 +94,38 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
                 'GET' => [
                     'controller' => $home_controller,
                     'action' => 'home'
+                ]
+            ]
+        ];
+    }
+    
+    private function get_controller_auth_routes(AuthController $auth_controller)
+    {
+        return [
+            '/auth/login' => [
+                'GET' => [
+                    'controller' => $auth_controller,
+                    'action' => 'show_login_form'
+                ],
+                'POST' => [
+                    'controller' => $auth_controller,
+                    'action' => 'process_login'
+                ]
+            ],
+            '/auth/regiser' => [
+                'GET' => [
+                    'controller' => $auth_controller,
+                    'action' => 'show_register_form'
+                ],
+                'POST' => [
+                    'controller' => $auth_controller,
+                    'action' => 'process_register'
+                ]
+            ],
+            '/auth/logout' => [
+                'GET' => [
+                    'controller' => $auth_controller,
+                    'action' => 'log_user_out'
                 ]
             ]
         ];

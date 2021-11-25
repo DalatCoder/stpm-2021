@@ -39,8 +39,8 @@ class ViewHandler
             
             $source = $this->compile_source($source);
 
-            extract($template_args);
-            extract($this->general_args, EXTR_SKIP);
+            extract($template_args ?? []);
+            extract($this->general_args ?? [], EXTR_SKIP);
 
             // TODO: Dangerous code, replace me later
             eval("?> $source <?php");

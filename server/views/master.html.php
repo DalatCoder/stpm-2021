@@ -9,6 +9,7 @@
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/dashboard.css">
 
     <!-- Feather icon -->
     <script src="/static/js/feather.min.js"></script>
@@ -26,16 +27,21 @@
     </button>
     <div class="navbar-nav">
         <?php if ($is_logged_in): ?>
-            <div class="nav-item text-nowrap">
-                <a class="nav-link px-3" href="#">Đăng xuất</a>
+            <div class="d-sm-flex">
+                <div class="nav-item text-nowrap">
+                    <a class="nav-link px-3" href="">Xin chào <?= $logged_in_user->display_name ?></a>
+                </div>
+                <div class="nav-item text-nowrap">
+                    <a class="nav-link px-3" href="/auth/logout">Đăng xuất</a>
+                </div>
             </div>
         <?php else: ?>
             <div class="d-sm-flex">
                 <div class="nav-item text-nowrap">
-                    <a class="nav-link px-3" href="#">Tạo tài khoản</a>
+                    <a class="nav-link px-3" href="/auth/register">Tạo tài khoản</a>
                 </div>
                 <div class="nav-item text-nowrap">
-                    <a class="nav-link px-3" href="#">Đăng nhập</a>
+                    <a class="nav-link px-3" href="/auth/login">Đăng nhập</a>
                 </div>
             </div>
         <?php endif; ?>
@@ -118,7 +124,14 @@
     </div>
 </nav>
 
-{% yield content %}
+
+<div class="container-fluid">
+    <div class="row">
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            {% yield content %}
+        </main>
+    </div>
+</div>
 
 <script src="/static/js/bootstrap.bundle.min.js"></script>
 

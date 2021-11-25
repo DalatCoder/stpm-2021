@@ -4,6 +4,7 @@ namespace Ninja;
 
 use Ninja\NJBaseController\NJBaseController;
 use Ninja\NJInterface\IRoutes;
+use SSF\Controller\AuthController;
 
 class EntryPoint
 {
@@ -69,13 +70,15 @@ class EntryPoint
             throw new NinjaException("Action: $action không tồn tại trên Controller");
 
         if (method_exists($controller, 'get_entrypoint_args'))
-            $controller->get_entrypoint_args([
-                'route' => $this->route,
-                'method' => $this->method,
-                'shop_name' => NJConfiguration::get('shop_name') ?? null,
-                'is_logged_in' => $authentication instanceof Authentication && $authentication->isLoggedIn(), 
-                'logged_in_user' => $authentication instanceof Authentication && $authentication->getUser()
-            ]);
+            if ($authentication instanceof Authentication) {
+                $controller->get_entrypoint_args([
+                    'route' => $this->route,
+                    'method' => $this->method,
+                    'shop_name' => NJConfiguration::get('shop_name') ?? null,
+                    'is_logged_in' => $authentication->isLoggedIn(),
+                    'logged_in_user' => $authentication->getUser(),
+                ]);
+            }
 
         $login_required = $routes[$this->route]['login'] ?? false;
         if ($login_required) {
