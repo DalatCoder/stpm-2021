@@ -112,7 +112,7 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
                     'action' => 'process_login'
                 ]
             ],
-            '/auth/regiser' => [
+            '/auth/register' => [
                 'GET' => [
                     'controller' => $auth_controller,
                     'action' => 'show_register_form'

@@ -70,5 +70,6 @@ class AuthController extends SSFBaseController
     public function log_user_out()
     {
         $this->authentication_helper->logout();
+        $this->route_redirect('/');
     }
 }
