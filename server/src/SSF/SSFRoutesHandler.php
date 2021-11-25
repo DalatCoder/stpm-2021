@@ -12,6 +12,7 @@ use SSF\Api\WalletLogApi;
 use SSF\Controller\AuthController;
 use SSF\Controller\HomeController;
 use SSF\Controller\WalletController;
+use SSF\Controller\WalletLogController;
 use SSF\Entity\CategoryEntity;
 use SSF\Entity\UserEntity;
 use SSF\Entity\WalletEntity;
@@ -68,17 +69,20 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
         $category_routes = $this->get_category_api_routes($category_api_handler);
         $wallet_log_routes = $this->get_walletlog_api_routes($wallet_log_api_handler);
         $auth_routes = $this->get_auth_api_routes($auth_api_handler);
-        
+
         $home_controller = new HomeController();
         $home_controller_routes = $this->get_controller_home_routes($home_controller);
-        
+
         $auth_controller = new AuthController($this->authentication_helper);
         $auth_controller_routes = $this->get_controller_auth_routes($auth_controller);
-        
+
         $wallet_controller = new WalletController($wallet_model, $category_model, $this->authentication_helper);
         $wallet_controller_routes = $this->get_controller_wallet_routes($wallet_controller);
+        
+        $wallet_log_controller = new WalletLogController($wallet_log_model);
+        $wallet_log_controller_routes = $this->get_controller_wallet_log_routes($wallet_log_controller);
 
-        return $user_routes + $wallet_routes + $category_routes + $wallet_log_routes + $auth_routes + $home_controller_routes + $auth_controller_routes + $wallet_controller_routes;
+        return $user_routes + $wallet_routes + $category_routes + $wallet_log_routes + $auth_routes + $home_controller_routes + $auth_controller_routes + $wallet_controller_routes + $wallet_log_controller_routes;
     }
 
     public function getAuthentication(): ?\Ninja\Authentication
@@ -102,7 +106,7 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
             ]
         ];
     }
-    
+
     private function get_controller_auth_routes(AuthController $auth_controller)
     {
         return [
@@ -134,7 +138,7 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
             ]
         ];
     }
-    
+
     private function get_controller_wallet_routes(WalletController $wallet_controller)
     {
         return [
@@ -144,6 +148,24 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
                     'action' => 'index'
                 ],
                 'login' => true
+            ]
+        ];
+    }
+
+    private function get_controller_wallet_log_routes(WalletLogController $wallet_log_controller)
+    {
+        return [
+            '/wallet-logs/incomes' => [
+                'POST' => [
+                    'controller' => $wallet_log_controller,
+                    'action' => 'store_income_log'
+                ]
+            ],
+            '/wallet-logs/outcomes' => [
+                'POST' => [
+                    'controller' => $wallet_log_controller,
+                    'action' => 'store_outcome_log'
+                ]
             ]
         ];
     }

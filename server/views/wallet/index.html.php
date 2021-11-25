@@ -90,20 +90,20 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Thêm chi tiêu mới</h5>
-                <form action="" method="POST">
+                <form action="/wallet-logs/outcomes" method="POST">
                     <div class="mb-3">
                         <label for="title" class="form-label">Tiêu đề</label>
-                        <input class="form-control" type="text" id="title" autocomplete="off" name="log['title']"
+                        <input class="form-control" type="text" id="title" autocomplete="off" name="log[title]"
                                placeholder="VD: Đi chợ">
                     </div>
                     <div class="mb-3">
                         <label for="amount" class="form-label">Lượng</label>
-                        <input class="form-control" type="number" id="amount" autocomplete="off" name="log['amount']"
+                        <input class="form-control" type="number" id="amount" autocomplete="off" name="log[amount]"
                                placeholder="50000">
                     </div>
                     <div class="mb-3">
                         <label for="category_id">Danh mục</label>
-                        <select id="category_id" class="form-select" name="log['category_id']">
+                        <select id="category_id" class="form-select" name="log[category_id]">
                             <?php foreach ($outcome_categories as $category): ?>
                                 <option value="<?= $category->id ?>"><?= $category->name ?></option>
                             <?php endforeach; ?>
@@ -111,7 +111,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="wallet_id" id="wallet_id">Ví</label>
-                        <select id="wallet_id" class="form-select" name="log['wallet_id']">
+                        <select id="wallet_id" class="form-select" name="log[wallet_id]">
                             <?php foreach ($wallets as $wallet): ?>
                                 <option
                                     value="<?= $wallet->id ?>"><?= $wallet->get_begin_date('d/m/Y') . ' - ' . $wallet->get_end_date('d/m/Y') ?></option>
@@ -120,7 +120,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="date" class="form-label">Ngày</label>
-                        <input class="form-control" type="date" id="date" autocomplete="off" name="log['date']"
+                        <input class="form-control" type="date" id="date" autocomplete="off" name="log[log_date]"
                                value="<?= (new DateTime())->format('Y-m-d') ?>">
                     </div>
                     <hr>
@@ -133,15 +133,15 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h5 class="card-title">Thêm thu thập mới</h5>
-                <form action="" method="POST">
+                <form action="/wallet-logs/incomes" method="POST">
                     <div class="mb-3">
                         <label for="amount" class="form-label">Lượng</label>
-                        <input class="form-control" type="number" id="amount" autocomplete="off" name="log['amount']"
+                        <input class="form-control" type="number" id="amount" autocomplete="off" name="income_log[amount]"
                                placeholder="50000">
                     </div>
                     <div class="mb-3">
                         <label for="category_id">Danh mục</label>
-                        <select id="category_id" class="form-select" name="log['category_id']">
+                        <select id="category_id" class="form-select" name="income_log[category_id]">
                             <?php foreach ($income_categories as $category): ?>
                                 <option value="<?= $category->id ?>"><?= $category->name ?></option>
                             <?php endforeach; ?>
@@ -149,7 +149,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="wallet_id" id="wallet_id">Ví</label>
-                        <select id="wallet_id" class="form-select" name="log['wallet_id']">
+                        <select id="wallet_id" class="form-select" name="income_log[wallet_id]">
                             <?php foreach ($wallets as $wallet): ?>
                                 <option
                                     value="<?= $wallet->id ?>"><?= $wallet->get_begin_date('d/m/Y') . ' - ' . $wallet->get_end_date('d/m/Y') ?></option>
