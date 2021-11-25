@@ -52,19 +52,19 @@
     <div class="position-sticky pt-3">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">
+                <a class="nav-link <?= $route == '/' ? 'active' : '' ?>" aria-current="page" href="/">
                     <span data-feather="home"></span>
                     Tổng quan
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link <?= $route == '/wallets' ? 'active' : '' ?>" href="/wallets">
                     <span data-feather="file"></span>
                     Ví tiền
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link <?= $route == '/savings' ? 'active' : '' ?>" href="/savings">
                     <span data-feather="shopping-cart"></span>
                     Tiết kiệm
                 </a>

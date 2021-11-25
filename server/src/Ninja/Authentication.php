@@ -125,4 +125,14 @@ class Authentication
     {
         return session_id();
     }
+    
+    public function getUserId()
+    {
+        $user = $this->getUser() ?? null;
+        
+        if (!$user)
+            return null;
+        
+        return $user->id;
+    }
 }

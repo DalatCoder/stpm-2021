@@ -11,6 +11,7 @@ use SSF\Api\WalletApi;
 use SSF\Api\WalletLogApi;
 use SSF\Controller\AuthController;
 use SSF\Controller\HomeController;
+use SSF\Controller\WalletController;
 use SSF\Entity\CategoryEntity;
 use SSF\Entity\UserEntity;
 use SSF\Entity\WalletEntity;
@@ -73,8 +74,11 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
         
         $auth_controller = new AuthController($this->authentication_helper);
         $auth_controller_routes = $this->get_controller_auth_routes($auth_controller);
+        
+        $wallet_controller = new WalletController($wallet_model, $category_model, $this->authentication_helper);
+        $wallet_controller_routes = $this->get_controller_wallet_routes($wallet_controller);
 
-        return $user_routes + $wallet_routes + $category_routes + $wallet_log_routes + $auth_routes + $home_controller_routes + $auth_controller_routes;
+        return $user_routes + $wallet_routes + $category_routes + $wallet_log_routes + $auth_routes + $home_controller_routes + $auth_controller_routes + $wallet_controller_routes;
     }
 
     public function getAuthentication(): ?\Ninja\Authentication
@@ -127,6 +131,19 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
                     'controller' => $auth_controller,
                     'action' => 'log_user_out'
                 ]
+            ]
+        ];
+    }
+    
+    private function get_controller_wallet_routes(WalletController $wallet_controller)
+    {
+        return [
+            '/wallets' => [
+                'GET' => [
+                    'controller' => $wallet_controller,
+                    'action' => 'index'
+                ],
+                'login' => true
             ]
         ];
     }

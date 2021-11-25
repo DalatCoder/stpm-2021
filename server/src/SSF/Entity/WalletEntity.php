@@ -90,6 +90,14 @@ class WalletEntity
         if ($this->date_begin instanceof \DateTime)
             return $this->date_begin->format($format);
         
+        $date_obj = \DateTime::createFromFormat('Y-m-d H:i:s', $this->date_begin);
+        if ($date_obj)
+            return $date_obj->format($format);
+        
+        $date_obj = \DateTime::createFromFormat('d-m-Y H:i:s', $this->date_begin);
+        if ($date_obj)
+            return $date_obj->format($format);
+        
         return null;
     }
 
@@ -98,6 +106,36 @@ class WalletEntity
         if ($this->date_end instanceof \DateTime)
             return $this->date_end->format($format);
 
+        $date_obj = \DateTime::createFromFormat('Y-m-d H:i:s', $this->date_end);
+        if ($date_obj)
+            return $date_obj->format($format);
+
+        $date_obj = \DateTime::createFromFormat('d-m-Y H:i:s', $this->date_end);
+        if ($date_obj)
+            return $date_obj->format($format);
+
         return null;
     }
+    
+    public function get_remaining_date()
+    {
+        
+    }
+    
+    public function get_total_incomes()
+    {
+        $incomes = $this->get_all_income_logs() ?? [];
+        $amounts = array_column($incomes, 'amount');
+        
+        return array_sum($amounts);
+    }
+    
+    public function get_total_outcomes()
+    {
+        $outcomes = $this->get_all_outcome_logs() ?? [];
+        $amounts = array_column($outcomes, 'amount');
+
+        return array_sum($amounts);
+    }
+
 }

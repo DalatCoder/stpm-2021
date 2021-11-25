@@ -64,6 +64,10 @@ class WalletLogEntity
         if ($this->log_date instanceof \DateTime)
             return $this->log_date->format($format);
         
+        $date_obj = \DateTime::createFromFormat('Y-m-d H:i:s', $this->log_date);
+        if ($date_obj)
+            return $date_obj->format($format);
+        
         $date_obj = \DateTime::createFromFormat($format, $this->log_date);
         if ($date_obj)
             return $date_obj->format($format);
