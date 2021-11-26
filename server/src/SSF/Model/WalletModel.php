@@ -5,6 +5,7 @@ namespace SSF\Model;
 use Ninja\DatabaseTable;
 use Ninja\NinjaException;
 use SSF\Entity\WalletEntity;
+use SSF\Entity\WalletLogEntity;
 
 class WalletModel
 {
@@ -57,5 +58,40 @@ class WalletModel
     public function get_all_by_user_id($user_id)
     {
         return $this->wallet_table->find(WalletEntity::KEY_USER_ID, $user_id);
+    }
+    
+    public function get_wallet_statistics($user_id)
+    {
+        $wallets = $this->get_all_by_user_id($user_id);
+        
+        $statistic = [
+            'total_incomes' => 0,
+            'total_outcomes' => 0,
+            'total' => 0,
+            'completed' => 0
+        ];
+        
+        $statistic['total'] = count($wallets);
+        
+        $now = new \DateTime();
+        
+        foreach ($wallets as $wallet) {
+            $date_end = $wallet->get_end_date();
+            $date_end_object = \DateTime::createFromFormat('Y-m-d', $date_end) ?? null;
+            
+            $all_logs = $wallet->get_logs();
+            foreach ($all_logs as $log) {
+                if ($log->{WalletLogEntity::KEY_TYPE} === WalletLogEntity::TYPE_INCOME)
+                    $statistic['total_incomes'] += $log->{WalletLogEntity::KEY_AMOUNT} ?? 0;
+                else
+                    $statistic['total_outcomes'] += $log->{WalletLogEntity::KEY_AMOUNT} ?? 0;
+            }
+            
+            if ($date_end_object)
+                if ($date_end_object->getTimestamp() <= $now->getTimestamp())
+                    $statistic['completed'] += 1;
+        }
+        
+        return $statistic;
     }
 }

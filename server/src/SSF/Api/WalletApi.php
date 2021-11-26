@@ -2,20 +2,22 @@
 
 namespace SSF\Api;
 
+use Ninja\Authentication;
 use Ninja\NinjaException;
 use Ninja\NJTrait\Jsonable;
-use SSF\Entity\WalletEntity;
 use SSF\Model\WalletModel;
 
 class WalletApi
 {
     private $wallet_model;
+    private $authentication_helper;
 
     use Jsonable;
 
-    public function __construct(WalletModel $wallet_model)
+    public function __construct(WalletModel $wallet_model, Authentication $authentication)
     {
         $this->wallet_model = $wallet_model;
+        $this->authentication_helper = $authentication;
     }
     
     public function store()
@@ -97,6 +99,29 @@ class WalletApi
         }
         catch (NinjaException $exception) {
             
+        }
+    }
+    
+    public function get_wallet_statistics()
+    {
+        try {
+            if (!$this->authentication_helper->isLoggedIn())
+                throw new NinjaException('Bạn phải đăng nhập trước khi thực hiện thao tác này', 403);
+            
+            $user_id = $this->authentication_helper->getUserId();
+            $statistic = $this->wallet_model->get_wallet_statistics($user_id);
+            
+            $this->response_json([
+                'status' => 'success',
+                'data' => $statistic
+            ]);
+        }
+        catch (NinjaException $exception) {
+            $this->response_json([
+                'status' => 'fail',
+                'data' => null,
+                'message' => $exception->getMessage()
+            ], $exception->get_status_code());
         }
     }
 }

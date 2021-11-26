@@ -55,7 +55,7 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
         $user_api_handler = new UserApi($user_model);
 
         $wallet_model = new WalletModel($this->wallet_table);
-        $wallet_api_handler = new WalletApi($wallet_model);
+        $wallet_api_handler = new WalletApi($wallet_model, $this->authentication_helper);
 
         $category_model = new CategoryModel($this->category_table);
         $category_api_handler = new CategoryApi($category_model);
@@ -209,6 +209,12 @@ class SSFRoutesHandler implements \Ninja\NJInterface\IRoutes
                 'GET' => [
                     'controller' => $wallet_api_handler,
                     'action' => 'get_all_by_user'
+                ]
+            ],
+            '/api/v1/wallets/statistics' => [
+                'GET' => [
+                    'controller' => $wallet_api_handler,
+                    'action' => 'get_wallet_statistics'
                 ]
             ]
         ];
