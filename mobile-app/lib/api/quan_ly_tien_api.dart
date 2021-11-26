@@ -16,7 +16,7 @@ class QuanLyTienApi {
   final String _urlGetAllOutcomeCategories = "$kURL/api/v1/categories/outcomes";
   final String _urlGetAllWalletsByUserId = "$kURL/api/v1/wallets/by-user";
   final String _urlThemQuanLyTien = "$kURL/api/v1/wallets";
-  final String _urlThongKeTongQuan = '$kURL/api/quanlytien/thongketongquan';
+  final String _urlThongKeTongQuan = '$kURL/api/v1/wallets/statistics';
   final String _urlThongKeChiTiet = '$kURL/api/quanlytien/thongkechitiet';
   final String _urlThongKeNguonThuTongQuan = '$kURL/api/v1/wallets/logs';
   final String _urlThongKeKhoanchiTongQuan =
@@ -58,18 +58,21 @@ class QuanLyTienApi {
     return dsQuanLyTien;
   }
 
-  Future<QuanLyTienThongKeTongQuan> getQuanLyTienThongKeTongQuan(
-      int userID) async {
+  Future<Map<String, dynamic>> getQuanLyTienThongKeTongQuan(
+      NguoiDung nguoiDung) async {
     http.Response response = await http.get(
-      '$_urlThongKeTongQuan?user_id=$userID',
+      '$_urlThongKeTongQuan',
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Cookie': 'PHPSESSID=' + nguoiDung.sid
       },
     );
 
     if (response.statusCode != 200) return null;
 
-    return QuanLyTienThongKeTongQuan.fromJson(jsonDecode(response.body));
+    var jsonBody = jsonDecode(response.body);
+
+    return jsonBody["data"];
   }
 
   Future<QuanLyTienThongKeChiTiet> getQuanLyTienThongKeChiTiet(
