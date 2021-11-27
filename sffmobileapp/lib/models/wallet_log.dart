@@ -1,22 +1,22 @@
 class WalletLog {
-  final int id;
-  final int walletId;
-  final int categoryId;
-  final String title;
-  final String type;
-  final int amount;
-  final DateTime logDate;
-  final DateTime createdAt;
+  final int? id;
+  final int? walletId;
+  final int? categoryId;
+  final String? title;
+  final String? type;
+  final int? amount;
+  final DateTime? logDate;
+  final DateTime? createdAt;
 
   WalletLog({
-    required this.id,
-    required this.walletId,
-    required this.categoryId,
-    required this.title,
-    required this.type,
-    required this.amount,
-    required this.logDate,
-    required this.createdAt,
+    this.id,
+    this.walletId,
+    this.categoryId,
+    this.title,
+    this.type,
+    this.amount,
+    this.logDate,
+    this.createdAt,
   });
 
   factory WalletLog.fromJson(Map<String, dynamic> json) {

@@ -1,18 +1,18 @@
 class Wallet {
-  final int id;
-  final String title;
-  final int userId;
-  final DateTime dateBegin;
-  final DateTime dateEnd;
-  final DateTime createdAt;
+  final int? id;
+  final String? title;
+  final int? userId;
+  final DateTime? dateBegin;
+  final DateTime? dateEnd;
+  final DateTime? createdAt;
 
   Wallet({
-    required this.id,
-    required this.title,
-    required this.userId,
-    required this.dateBegin,
-    required this.dateEnd,
-    required this.createdAt,
+    this.id,
+    this.title,
+    this.userId,
+    this.dateBegin,
+    this.dateEnd,
+    this.createdAt,
   });
 
   factory Wallet.formJson(Map<String, dynamic> json) {
